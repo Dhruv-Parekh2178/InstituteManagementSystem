@@ -6,10 +6,10 @@ public class InputUtil{
     public static final Scanner sc = new Scanner(System.in);
 
     public static int readInt(){
-        while(!sc.hasNextInt()){
-            System.out.println("Invalid input.Enter Number : ");
-            sc.next();
-        }
+        // while(!sc.hasNextInt()){
+        //     System.out.println("Invalid input.Enter Number : ");
+        //     sc.next();
+        // }
         return sc.nextInt();
     }
     
