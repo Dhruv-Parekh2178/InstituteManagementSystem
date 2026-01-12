@@ -6,10 +6,7 @@ import V2.Model.Course;
 import V2.Model.Employee;
 import V2.Model.Student;
 import V2.Model.Teacher;
-import V2.Service.CourseService;
-import V2.Service.EmployeeService;
-import V2.Service.StudentService;
-import V2.Service.TeacherService;
+import V2.Service.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -32,6 +29,7 @@ public class InstituteAppV2 {
             EmployeeService employeeService = new EmployeeService();
             CourseService courseService = new CourseService();
             TeacherService teacherService = new TeacherService();
+            PaymentService paymentService = new PaymentService();
             do{
            /* This menu given to the user every time */
            System.out.println("<=================  Institute Management System ====================>");
@@ -57,7 +55,7 @@ public class InstituteAppV2 {
        //enhanced switch case for checking option and do task appropriate.
            switch(option){
                /*----------- student ------------*/
-
+               // case 1 : to add student
                case 1 -> {
                    int studId;
                    byte age;
@@ -103,13 +101,14 @@ public class InstituteAppV2 {
                    studentService.addStudent(new Student(studId,studName,age,marks));
                }
 
-
+                // case 2: to view Student
                case 2 -> {
                  studentService.viewStudents();
 
                }
-
+                // case 3 : to Add Employee
                case 3 -> {
+                   //declare the variable outside try catch to solve the scope issue.
                    int empId;
                    byte age;
                    int salary;
@@ -154,11 +153,11 @@ public class InstituteAppV2 {
 
 
                }
-
+                // case 4: to view Employee
                case 4 -> {
                    employeeService.viewEmployees();
                }
-
+               //case 5 : to add Teacher
                case 5 -> {
                    int empId;
                    byte age;
@@ -188,10 +187,6 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!!! enter Valid teacher Age !!!!!");
                    }
 
-                   // take teacher Role from user
-                   System.out.println("Enter teacher Role :");
-                   String role  = sc.nextLine();
-
                    // take teacher salary form user
                    System.out.println("Enter teacher Salary :");
                    try {
@@ -203,11 +198,13 @@ public class InstituteAppV2 {
                 teacherService.addTeacher(new Teacher(empId,empName,age,salary));
 
                }
-
+                //case 6 :to view Teacher
                case 6 -> {
                   teacherService.viewTeachers();
 
                }
+
+               //case 7 : to Creat course
 
                case 7 -> {
                    int courseId;
@@ -228,7 +225,7 @@ public class InstituteAppV2 {
                    try {
                        tId = sc.nextInt();
                    }catch (InputMismatchException e){
-                       throw new RuntimeException("!!!! Enter valid course ID. !!!!");
+                       throw new RuntimeException("!!!! Enter valid Teacher ID. !!!!");
                    }
 
                    Teacher teacher = teacherService.getTeacher(tId);
@@ -239,11 +236,11 @@ public class InstituteAppV2 {
                    courseService.createCourse(new Course(courseId,courseName,teacher));
 
                }
-
+                //case 8 : to view all courses
                case 8 -> {
                  courseService.viewCourse();
                }
-
+               // case 9 : enroll student to course
                case 9 ->{
                    int studId;
                    int courseId;
@@ -272,7 +269,7 @@ public class InstituteAppV2 {
 
                    courseService.enrollStudent(student,course);
                }
-
+                //case 10 : courses enroll by student
                case 10 -> {
                    int studId;
                    // take student ID form user
@@ -298,9 +295,10 @@ public class InstituteAppV2 {
                    }
 
                }
-
+                //case 11 : to make payment
                case 11 -> {
                    int studId;
+                   int courseId;
                    double amount;
                    // take student ID form user
                    System.out.println("Enter student ID :");
@@ -312,6 +310,19 @@ public class InstituteAppV2 {
                    Student student = studentService.getStudent(studId);
                    if(student == null){
                        System.out.println("Invalid Student Id.");
+                       break;
+                   }
+
+                   // take Course ID form user
+                   System.out.println("Enter course ID :");
+                   try {
+                       courseId = sc.nextInt();
+                   }catch (InputMismatchException e){
+                       throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
+                   }
+                   Course course = courseService.getCourse(courseId);
+                   if(course == null){
+                       System.out.println("Invalid course Id.");
                        break;
                    }
 
@@ -332,12 +343,17 @@ public class InstituteAppV2 {
                    System.out.println("2. Card");
                    int method = sc.nextInt();
 
-                   student.addPaymentAmount(amount);
-                   System.out.println("Payment of ₹" + amount +
-                           " successful via " + (method == 1 ? "UPI" : "Card"));
+                   if(paymentService.checkIfStudentEnroll(studId,courseId)) {
+                       student.addPaymentAmount(amount);
+                       System.out.println("Payment of ₹" + amount +
+                               " successful via " + (method == 1 ? "UPI" : "Card"));
+                   }
+                   else{
+                       System.out.println("Student is not enroll to any course yet.");
+                   }
 
                }
-
+                // case 12 : to exit from the menu
                case 12 -> {
                    System.out.println("Exiting Institute Management System...");
                    System.out.println("Thank you.");

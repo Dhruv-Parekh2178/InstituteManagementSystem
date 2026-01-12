@@ -34,18 +34,36 @@ public class Student {
           this.courses = new ArrayList<>();
     }
 
+    /**
+     * this method return the student Id.
+     * @return student id of particular student object.
+     */
     public int getStudId(){
         return studId;
     }
+
+    /**
+     * This method use to add particular student to add in some course.
+     * @param course take Course object as a parameter.
+     */
 
     public void enrollCourse(Course course){
         courses.add(course);
     }
 
+    /**
+     * This method is used for to get the list of course student enrolled.
+     * @return  list of Course.
+     */
     public List<Course> getCourses(){
         return courses;
     }
 
+    /**
+     * This method is used to maintain the totalpaid of the student.
+     *
+     * @param amount to buy particular course.
+     */
     public void addPaymentAmount(double amount){
         //here i have generate one custom exception by which user can enter negative value.
         try{

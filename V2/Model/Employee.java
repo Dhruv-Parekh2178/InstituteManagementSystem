@@ -24,10 +24,19 @@ public class Employee {
         this.salary = salary;
     }
 
+    /**
+     * This method return the employee Id.
+     * @return employee Id of particular employee object.
+     */
+
     public int getEmpId() {
         return empId;
     }
 
+    /**
+     * this method return the role of Employee
+     * @return role of employee in string.
+     */
     public String getRole(){
         return role;
     }

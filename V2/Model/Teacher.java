@@ -19,10 +19,18 @@ public class Teacher extends Employee{
         this.courses = new ArrayList<>();
     }
 
+    /**
+     * This method is used to assign the courses to the teacher.
+     * @param course object of the  course class.
+     */
     public void addCourse(Course course){
         courses.add(course);
     }
 
+    /**
+     * this method gives us the list of courses that teacher teaches.
+     * @return list of courses.
+     */
     public List<Course> getCourses(){
         return courses;
     }
