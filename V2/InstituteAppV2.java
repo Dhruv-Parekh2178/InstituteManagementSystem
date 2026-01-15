@@ -6,8 +6,10 @@ import V2.Model.Course;
 import V2.Model.Employee;
 import V2.Model.Student;
 import V2.Model.Teacher;
+import V2.Repo.DbConnection;
 import V2.Service.*;
 
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -97,12 +99,13 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!!! enter Valid Student marks !!!!!");
                    }
 
-
+                   studentService.con = DbConnection.connect();
                    studentService.addStudent(new Student(studId,studName,age,marks));
                }
 
                 // case 2: to view Student
                case 2 -> {
+                   studentService.con = DbConnection.connect();
                  studentService.viewStudents();
 
                }
@@ -259,15 +262,15 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid course ID. !!!!");
                    }
 
-                  Student student = studentService.getStudent(studId);
-                   Course course = courseService.getCourse(courseId);
-
-                   if (student == null || course == null) {
-                       System.out.println("Invalid Student ID or Course ID.");
-                       break;
-                   }
-
-                   courseService.enrollStudent(student,course);
+//                  Student student = studentService.getStudent(studId);
+//                   Course course = courseService.getCourse(courseId);
+//
+//                   if (student == null || course == null) {
+//                       System.out.println("Invalid Student ID or Course ID.");
+//                       break;
+//                   }
+//
+//                   courseService.enrollStudent(student,course);
                }
                 //case 10 : courses enroll by student
                case 10 -> {
@@ -280,19 +283,19 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
 
-                   Student student = studentService.getStudent(studId);
-                   if(student == null){
-                       System.out.println("student not found");
-                       break;
-                   }
-
-                   System.out.println("courses enrolled by Student ID" + studId + ":");
-                   if(student.getCourses().isEmpty()){
-                       System.out.println("No courses enrolled.");
-                   }
-                   else{
-                       student.getCourses().forEach(c -> System.out.println(c.getCourseName()));
-                   }
+//                   Student student = studentService.getStudent(studId);
+//                   if(student == null){
+//                       System.out.println("student not found");
+//                       break;
+//                   }
+//
+//                   System.out.println("courses enrolled by Student ID" + studId + ":");
+//                   if(student.getCourses().isEmpty()){
+//                       System.out.println("No courses enrolled.");
+//                   }
+//                   else{
+//                       student.getCourses().forEach(c -> System.out.println(c.getCourseName()));
+//                   }
 
                }
                 //case 11 : to make payment
@@ -307,11 +310,11 @@ public class InstituteAppV2 {
                    }catch (InputMismatchException e){
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
-                   Student student = studentService.getStudent(studId);
-                   if(student == null){
-                       System.out.println("Invalid Student Id.");
-                       break;
-                   }
+//                   Student student = studentService.getStudent(studId);
+//                   if(student == null){
+//                       System.out.println("Invalid Student Id.");
+//                       break;
+//                   }
 
                    // take Course ID form user
                    System.out.println("Enter course ID :");
@@ -343,14 +346,14 @@ public class InstituteAppV2 {
                    System.out.println("2. Card");
                    int method = sc.nextInt();
 
-                   if(paymentService.checkIfStudentEnroll(studId,courseId)) {
-                       student.addPaymentAmount(amount);
-                       System.out.println("Payment of ₹" + amount +
-                               " successful via " + (method == 1 ? "UPI" : "Card"));
-                   }
-                   else{
-                       System.out.println("Student is not enroll to any course yet.");
-                   }
+//                   if(paymentService.checkIfStudentEnroll(studId,courseId)) {
+//                       student.addPaymentAmount(amount);
+//                       System.out.println("Payment of ₹" + amount +
+//                               " successful via " + (method == 1 ? "UPI" : "Card"));
+//                   }
+//                   else{
+//                       System.out.println("Student is not enroll to any course yet.");
+//                   }
 
                }
                 // case 12 : to exit from the menu
@@ -367,7 +370,7 @@ public class InstituteAppV2 {
 
        }while(flag);
        }
-           catch (InputMismatchException e){
+           catch (InputMismatchException | SQLException e){
             throw new RuntimeException("!!!! Enter Valid option within range. !!!!");
         }
     }

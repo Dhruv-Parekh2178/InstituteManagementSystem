@@ -20,7 +20,6 @@ public class Student {
     private byte marks;
     private String result;
     private double totalPaid;
-    private List<Course> courses;
 
     public Student(int studId, String studName, byte age, byte marks) {
         this.studId = studId;
@@ -31,7 +30,27 @@ public class Student {
         this.result = (marks >= 60)? "PASS" : "FAIL";
         //student initial paid 0
         this.totalPaid = 0;
-          this.courses = new ArrayList<>();
+
+    }
+
+    public String getStudName() {
+        return studName;
+    }
+
+    public byte getAge() {
+        return age;
+    }
+
+    public double getTotalPaid() {
+        return totalPaid;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public byte getMarks() {
+        return marks;
     }
 
     /**
@@ -42,22 +61,6 @@ public class Student {
         return studId;
     }
 
-    /**
-     * This method use to add particular student to add in some course.
-     * @param course take Course object as a parameter.
-     */
-
-    public void enrollCourse(Course course){
-        courses.add(course);
-    }
-
-    /**
-     * This method is used for to get the list of course student enrolled.
-     * @return  list of Course.
-     */
-    public List<Course> getCourses(){
-        return courses;
-    }
 
     /**
      * This method is used to maintain the totalpaid of the student.

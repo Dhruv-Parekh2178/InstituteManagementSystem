@@ -51,9 +51,9 @@ public class CourseService {
      * @param course take course object.
      */
     public void enrollStudent(Student student ,Course course){
-        student.enrollCourse(course);
-        course.addStudents(student);
-        System.out.println("Student enrolled to course successfully.");
+//        student.enrollCourse(course);
+//        course.addStudents(student);
+//        System.out.println("Student enrolled to course successfully.");
     }
 
     /**
