@@ -31,7 +31,7 @@ public class CourseService {
             return;
         }
         courses.put(course.getCourseId(),course);
-        course.getTeacher().addCourse(course);
+//        course.getTeacher().addCourse(course);
         System.out.println("course Created successfully.");
     }
 

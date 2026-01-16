@@ -3,8 +3,7 @@ package V2.Service;
 import V2.Model.Employee;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+
 /**
  * Implementation of employee services like add employee,view all employee.
  *
@@ -35,8 +34,8 @@ public class EmployeeService {
             System.out.println(ex);
         }    finally {
             try{
-                if(con != null && pst != null){
-                    pst.close();
+                   if(pst != null) pst.close();
+                if(con != null){
                     con.close();
                     System.out.println("DB connection close");
                 }

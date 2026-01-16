@@ -143,7 +143,7 @@ public class InstituteAppV2 {
 
                    // take employee Role from user
                    System.out.println("Enter employee Role :");
-                   String role  = sc.next();
+                   String role = sc.next().toUpperCase();
 
                    // take employee salary form user
                    System.out.println("Enter employee Salary :");
@@ -200,12 +200,14 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid teacher salary. !!!!");
                    }
 
+                teacherService.con = DbConnection.connect();
                 teacherService.addTeacher(new Teacher(empId,empName,age,salary));
 
                }
                 //case 6 :to view Teacher
                case 6 -> {
-                  teacherService.viewTeachers();
+                   teacherService.con = DbConnection.connect();
+                   teacherService.viewTeachers();
 
                }
 
@@ -233,12 +235,12 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid Teacher ID. !!!!");
                    }
 
-                   Teacher teacher = teacherService.getTeacher(tId);
-                   if(teacher == null){
-                       System.out.println("Invalid Teacher ID");
-                       break;
-                   }
-                   courseService.createCourse(new Course(courseId,courseName,teacher));
+//                   Teacher teacher = teacherService.getTeacher(tId);
+//                   if(teacher == null){
+//                       System.out.println("Invalid Teacher ID");
+//                       break;
+//                   }
+//                   courseService.createCourse(new Course(courseId,courseName,teacher));
 
                }
                 //case 8 : to view all courses
