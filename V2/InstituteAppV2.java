@@ -152,12 +152,14 @@ public class InstituteAppV2 {
                    }catch (InputMismatchException e){
                        throw new RuntimeException("!!!! Enter valid employee salary. !!!!");
                    }
+                   employeeService.con = DbConnection.connect();
                  employeeService.addEmployee(new Employee(empId,empName,age,role,salary));
 
 
                }
                 // case 4: to view Employee
                case 4 -> {
+                   employeeService.con = DbConnection.connect();
                    employeeService.viewEmployees();
                }
                //case 5 : to add Teacher

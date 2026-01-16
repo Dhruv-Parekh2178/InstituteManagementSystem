@@ -19,6 +19,10 @@ import org.postgresql.Driver;
 
 public class StudentService {
     public Connection con = null;
+    /**
+     * This method is used to add the Student with checking that student is not already exist to prevent the overwrite.
+     * @param s object of Student
+     */
 
     public void addStudent(Student s) throws SQLException {
         String query = "insert into student values(?,?,?,?,?,?)";
@@ -35,10 +39,17 @@ public class StudentService {
             System.out.println("Student Created successfully");
         } catch (Exception e) {
             System.out.println(e);
-        } finally {
-            pst.close();
+        }    finally {
+            try{
+                if(pst != null) pst.close();
+                if(con != null ){
+                    con.close();
+                    System.out.println("DB connection close");
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
         }
-
 
     }
 
@@ -48,27 +59,45 @@ public class StudentService {
      * This method is used to print all the student.
      */
 
-    public void viewStudents() throws SQLException {
-        String query = "select * from student";
-        Statement st = null;
-    try {
-         st = con.createStatement();
-        ResultSet rs = st.executeQuery(query);
+   public void viewStudents() throws SQLException {
+                String query = "select * from student";
+                Statement st = null;
+                ResultSet rs = null;
+                try {
+                    st = con.createStatement();
+                    rs = st.executeQuery(query);
 
-        while(rs.next()){
-//            System.out.println( "ID : " + rs.getInt("stud_id")+ " | Name : " + rs.getString("stud_Name")+ " | Age : " + rs.getByte("age") + " | Result : "+ rs.getString("stud_result") + " | Total Paid ₹" + rs.getDouble("total_paid"));
-            System.out.println( "ID : " + rs.getInt(1)+ " | Name : " + rs.getString(2)+ " | Age : " + rs.getByte(3) + " | Result : "+ rs.getString(5) + " | Total Paid ₹" + rs.getDouble(6));
-        }
-        if(!rs.next()){
-            System.out.println("No Students found");
-            return;
-        }
+                    if (!rs.next()) {   // FIRST check
+                        System.out.println("No Students found.");
+                        return;
+                    }
+
+                    do {
+                        System.out.println(
+                                "ID : " + rs.getInt(1) +
+                                        " | Name : " + rs.getString(2) +
+                                        " | Age : " + rs.getByte(3) +
+                                        " | Result : " + rs.getString(5) +
+                                        " | Total Paid ₹" + rs.getDouble(6)
+                        );
+                    } while (rs.next());
     }
     catch(Exception e){
             System.out.println(e);
+        } finally {
+        try{
+            if(st != null) st.close();
+            if(rs != null ) rs.close();
+            if(con != null){
+
+                con.close();
+                System.out.println("DB connection close.");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    finally {  st.close();
     }
+
 
     }
 

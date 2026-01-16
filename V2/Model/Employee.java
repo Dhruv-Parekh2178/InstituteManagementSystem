@@ -33,6 +33,18 @@ public class Employee {
         return empId;
     }
 
+    public String getEmpName() {
+        return empName;
+    }
+
+    public byte getAge() {
+        return age;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
     /**
      * this method return the role of Employee
      * @return role of employee in string.

@@ -13,18 +13,9 @@ public class DbConnection {
     public static Connection connect() throws SQLException {
         try {
             con= DriverManager.getConnection(url, user,pass);
-            System.out.println("db connected");
+            System.out.println("DB connected.");
         } catch (Exception e) {
             System.out.println(e);
-        }finally {
-            try{
-                if(con != null){
-                    con.close();
-                    System.out.println("DB connection close");
-                }
-            } catch (SQLException e) {
-                System.out.println(e);
-            }
         }
         return con;
     }
