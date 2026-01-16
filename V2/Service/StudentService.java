@@ -1,5 +1,6 @@
 package V2.Service;
 
+import V2.CustomException.InvalidAmountException;
 import V2.Model.Student;
 
 import java.sql.*;
@@ -98,14 +99,41 @@ public class StudentService {
 
     }
 
+    /**
+     * This method is used to maintain the totalpaid of the student.
+     *
+     * @param amount to buy particular course.
+     */
+    public void addPaymentAmount(double amount , String method , int studId){
+
+        String query1 = "update student set total_paid =COALESCE(total_paid, 0) + ? where stud_id = ?";
+        String query2 = "insert into payment(amount ,pay_method) values(?,?)";
+        PreparedStatement pst = null;
+        try{
+
+            pst = con.prepareStatement(query1);
+            pst.setDouble(1,amount);
+            pst.setInt(2,studId);
+            pst.executeUpdate();
+
+            pst = con.prepareStatement(query2);
+            pst.setDouble(1,amount);
+            pst.setString(2,method);
+            pst.executeUpdate();
+
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }finally {
+            try{
+                if(pst != null) pst.close();
+                if(con != null ){
+                    con.close();
+                    System.out.println("DB connection close");
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+    }
 }
-//
-//    /**
-//     *
-//     * This method is used to get the student object by Id.
-//     * @param id to take student Id
-//     * @return object of employee.
-//     */
-//    public Student getStudent(int id){
-//        return students.get(id);
-//    }

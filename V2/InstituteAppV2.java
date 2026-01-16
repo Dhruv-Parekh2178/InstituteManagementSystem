@@ -350,19 +350,58 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
 
-//                   Student student = studentService.getStudent(studId);
-//                   if(student == null){
-//                       System.out.println("student not found");
-//                       break;
-//                   }
-//
-//                   System.out.println("courses enrolled by Student ID" + studId + ":");
-//                   if(student.getCourses().isEmpty()){
-//                       System.out.println("No courses enrolled.");
-//                   }
-//                   else{
-//                       student.getCourses().forEach(c -> System.out.println(c.getCourseName()));
-//                   }
+                   String query1 = "select stud_id from student where stud_id = ?";
+
+                   String query2 = "Select course_name from course where course_id = (Select course_id from enroll where stud_id = ?)";
+                   PreparedStatement pst = null;
+                   ResultSet rs1 = null;
+                   ResultSet rs2 = null;
+
+                   con = DbConnection.connect();
+                   try{
+                       pst = con.prepareStatement(query1);
+                       pst.setInt(1,studId);
+                       rs1 = pst.executeQuery();
+                       if (!rs1.next()) {
+                           System.out.println("Invalid Student ID.");
+                           break;
+                       }
+
+                       pst = con.prepareStatement(query2);
+                       pst.setInt(1,studId);
+                       rs2 = pst.executeQuery();
+
+                       if (!rs2.next()) {
+                           System.out.println("No courses enrolled by student ID"+studId);
+                           break;
+                       }
+
+                       System.out.println("courses enrolled by Student ID" + studId + ":");
+                       int i = 1;
+                       do {
+                           System.out.println(
+                                 i + ".Course_Name: " + rs2.getString(1)
+                           );
+                           i++;
+                       } while (rs2.next());
+
+
+                   }catch (Exception ex){
+                       System.out.println(ex);
+                   }finally {
+                       try {
+                           if (pst != null) pst.close();
+                           if (rs1 != null) rs1.close();
+                           if (rs1 != null) rs1.close();
+                           if (con != null) {
+
+                               con.close();
+                               System.out.println("DB connection close.");
+                           }
+                       } catch (SQLException e) {
+                           System.out.println(e);
+                       }
+                   }
 
                }
                 //case 11 : to make payment
@@ -377,11 +416,7 @@ public class InstituteAppV2 {
                    }catch (InputMismatchException e){
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
-//                   Student student = studentService.getStudent(studId);
-//                   if(student == null){
-//                       System.out.println("Invalid Student Id.");
-//                       break;
-//                   }
+
 
                    // take Course ID form user
                    System.out.println("Enter course ID :");
@@ -390,11 +425,46 @@ public class InstituteAppV2 {
                    }catch (InputMismatchException e){
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
-//                   Course course = courseService.getCourse(courseId);
-//                   if(course == null){
-//                       System.out.println("Invalid course Id.");
-//                       break;
-//                   }
+
+
+                   String query1 = "select stud_id from student where stud_id = ?";
+
+                   String query2 = "Select course_id from course where course_id = ?";
+                   PreparedStatement pst = null;
+                   ResultSet rs1 = null;
+                   ResultSet rs2 = null;
+
+                   con = DbConnection.connect();
+                   try{
+                       pst = con.prepareStatement(query1);
+                       pst.setInt(1,studId);
+                       rs1 = pst.executeQuery();
+
+                       pst = con.prepareStatement(query2);
+                       pst.setInt(1,courseId);
+                       rs2 = pst.executeQuery();
+
+                       if ((!rs1.next()) && (!rs2.next())) {
+                           System.out.println("Invalid Student ID or Course ID.");
+                           break;
+                       }
+
+                   }catch (Exception ex){
+                       System.out.println(ex);
+                   }finally {
+                       try {
+                           if (pst != null) pst.close();
+                           if (rs1 != null) rs1.close();
+                           if (rs1 != null) rs1.close();
+                           if (con != null) {
+
+                               con.close();
+                               System.out.println("DB connection close.");
+                           }
+                       } catch (SQLException e) {
+                           System.out.println(e);
+                       }
+                   }
 
                    // take amount form user
                    System.out.println("Enter amount :");
@@ -411,20 +481,33 @@ public class InstituteAppV2 {
                    System.out.println("Choose Payment Method:");
                    System.out.println("1. UPI");
                    System.out.println("2. Card");
-                   int method = sc.nextInt();
+                   int opt = sc.nextInt();
+                   String method = (opt == 1) ? "UPI" : "Card" ;
 
-//                   if(paymentService.checkIfStudentEnroll(studId,courseId)) {
-//                       student.addPaymentAmount(amount);
-//                       System.out.println("Payment of ₹" + amount +
-//                               " successful via " + (method == 1 ? "UPI" : "Card"));
-//                   }
-//                   else{
-//                       System.out.println("Student is not enroll to any course yet.");
-//                   }
+                   paymentService.con = DbConnection.connect();
+
+                   if(paymentService.checkIfStudentEnroll(studId,courseId)){
+                       studentService.con = DbConnection.connect();
+                       studentService.addPaymentAmount(amount,method,studId);
+                       System.out.println("Payment of ₹" + amount +
+                              " successful via " + method);
+                   }
+                   else{
+                       System.out.println("Student is not enroll to any course yet.");
+                   }
+
 
                }
                 // case 12 : to exit from the menu
                case 12 -> {
+                   try{
+                       if(con != null ){
+                           con.close();
+                           System.out.println("DB connection close");
+                       }
+                   } catch (SQLException e) {
+                       System.out.println(e);
+                   }
                    System.out.println("Exiting Institute Management System...");
                    System.out.println("Thank you.");
                    flag = false;

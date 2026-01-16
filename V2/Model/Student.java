@@ -61,22 +61,4 @@ public class Student {
         return studId;
     }
 
-
-    /**
-     * This method is used to maintain the totalpaid of the student.
-     *
-     * @param amount to buy particular course.
-     */
-    public void addPaymentAmount(double amount){
-        //here i have generate one custom exception by which user can enter negative value.
-        try{
-            if(amount <= 0 ){
-                throw new InvalidAmountException("!!!!! enter Valid amount (grater that zero)");
-            }
-        } catch (InvalidAmountException e) {
-            throw new RuntimeException(e);
-        }
-        totalPaid+= amount;
-    }
-
 }
