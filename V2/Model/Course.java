@@ -14,18 +14,18 @@ import java.util.Set;
 public class Course {
     private int courseId;
     private String courseName;
-    private Teacher teacher;
-    private Set<Student> students;
-    public Course(int courseId, String courseName, Teacher teacher) {
+    private int tId;
+
+    public Course(int courseId, String courseName, int tId) {
         this.courseId = courseId;
         this.courseName = courseName;
-        this.teacher = teacher;
-        this.students = new HashSet<>();
+        this.tId = tId;
     }
 
     /**
      * This method return the courseId.
-     * @return  courseId of the particular course.
+     *
+     * @return courseId of the particular course.
      */
 
     public int getCourseId() {
@@ -33,40 +33,21 @@ public class Course {
     }
 
     /**
-     *This method Return the Teacher Object who is Teach particular course.
+     * This method Return the Teacher Object who is Teach particular course.
      *
-     * @return Object of Teacher class
+     * @return Teacher Id
      */
-    public Teacher getTeacher() {
-        return teacher;
+    public int getTeacherId() {
+        return tId;
     }
 
     /**
      * This methos return the Course Name.
+     *
      * @return courseName of type String.
      */
     public String getCourseName() {
         return courseName;
     }
 
-    /**
-     * this method is used to add the student to particular course.
-     * @param student take student object as a parameter
-     */
-    public void addStudents(Student student){
-        students.add(student);
-    }
-
-    /**
-     * This method return the set of student who bought the particular course.
-     *
-     * @return set of student for particular course
-     */
-    public Set<Student> getStudSet(){
-        return students;
-    }
-
-    public String toString(){
-        return "Course ID : " +courseId+ " | Name : " + courseName+ " | Teacher : "+ teacher.empName;
-    }
 }

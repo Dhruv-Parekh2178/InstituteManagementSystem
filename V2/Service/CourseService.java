@@ -4,10 +4,8 @@ import V2.Model.Course;
 import V2.Model.Student;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.sql.*;
+
 
 /**
  * Implementation of course services like create course,view course,enroll student to course.
@@ -17,54 +15,112 @@ import java.util.Set;
  */
 
 public class CourseService {
-    public static Map<Integer , Course> courses = new HashMap<>();
+    public Connection con = null;
 
     /**
      * This method is used to create the employee with checking that course is not already exist to prevent the overwrite.
      *
-     * @param course take object of course.
+     * @param c take object of course.
      */
-    public void createCourse(Course course){
-
-        if(courses.containsKey(course.getCourseId())){
-            System.out.println("Course Already exist");
-            return;
+    public void createCourse(Course c){
+        String query = "insert into course values(?,?,?)";
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(query);
+            pst.setInt(1, c.getCourseId());
+            pst.setString(2, c.getCourseName());
+            pst.setInt(3, c.getTeacherId());
+            int cnt = pst.executeUpdate();
+            System.out.println("Course Created successfully");
+        } catch (Exception e) {
+            System.out.println(e);
+        }    finally {
+            try{
+                if(pst != null) pst.close();
+                if(con != null ){
+                    con.close();
+                    System.out.println("DB connection close");
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
         }
-        courses.put(course.getCourseId(),course);
-//        course.getTeacher().addCourse(course);
-        System.out.println("course Created successfully.");
     }
 
-    /**
-     * This method used to get course from course Id.
-     * @param id take courseId.
-     * @return object of course.
-     */
-    public Course getCourse(int id){
-        return courses.get(id);
-    }
 
     /**
      *
      * This method is used to enroll the student into particular course.
-     * @param student take student object.
-     * @param course take course object.
+     * @param stud_id take student ID.
+     * @param course_id take course ID.
      */
-    public void enrollStudent(Student student ,Course course){
-//        student.enrollCourse(course);
-//        course.addStudents(student);
-//        System.out.println("Student enrolled to course successfully.");
+    public void enrollStudent(int stud_id ,int course_id){
+         String query = "insert into enroll values(?,?,?)";
+         PreparedStatement pst = null;
+         try{
+             pst = con.prepareStatement(query);
+             int enroll_id =Integer.parseInt(stud_id +""+ course_id) ;
+             pst.setInt(1,enroll_id);
+             pst.setInt(2,stud_id);
+             pst.setInt(3,course_id);
+             pst.executeUpdate();
+             System.out.println("Student Enrolled into the course.");
+
+         } catch (Exception ex) {
+             System.out.println(ex);
+         }finally {
+             try{
+                 if(pst != null) pst.close();
+                 if(con != null){
+
+                     con.close();
+                     System.out.println("DB connection close.");
+                 }
+
+             } catch (SQLException e) {
+                 System.out.println(e);
+             }
+         }
     }
 
     /**
      * this method is used to show all the courses.
      */
     public void viewCourse(){
-        if(courses.isEmpty()){
-            System.out.println("No courses Found");
+        String query = "select * from course";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+
+            if (!rs.next()) {   // FIRST check
+                System.out.println("No courses found.");
+                return;
+            }
+
+            do {
+                System.out.println(
+                        "Course_ID : " + rs.getInt(1) +
+                                " | Course_Name : " + rs.getString(2) +
+                                " | Teacher_id : " + rs.getInt(3)
+                );
+            } while (rs.next());
         }
-        for(Course value : courses.values()){
-            System.out.println(value);
+        catch(Exception e){
+            System.out.println(e);
+        } finally {
+            try{
+                if(st != null) st.close();
+                if(rs != null ) rs.close();
+                if(con != null){
+
+                    con.close();
+                    System.out.println("DB connection close.");
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
         }
     }
 }

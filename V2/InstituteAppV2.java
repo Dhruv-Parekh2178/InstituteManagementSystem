@@ -9,6 +9,9 @@ import V2.Model.Teacher;
 import V2.Repo.DbConnection;
 import V2.Service.*;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -24,7 +27,9 @@ import java.util.Scanner;
  */
 
 public class InstituteAppV2 {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws SQLException {
+        Connection con = null;
         try{
         boolean flag = true;
             StudentService studentService = new StudentService();
@@ -235,16 +240,43 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid Teacher ID. !!!!");
                    }
 
-//                   Teacher teacher = teacherService.getTeacher(tId);
-//                   if(teacher == null){
-//                       System.out.println("Invalid Teacher ID");
-//                       break;
-//                   }
-//                   courseService.createCourse(new Course(courseId,courseName,teacher));
+                    String query = "select emp_id from employee where emp_id = ? and emp_role = ?";
+                   PreparedStatement pst = null;
+                   ResultSet rs = null;
+                   con = DbConnection.connect();
+                   try{
+                       pst = con.prepareStatement(query);
+                       pst.setInt(1,tId);
+                       pst.setString(2,"TRAINER");
+                       rs = pst.executeQuery();
+
+                       if (!rs.next()) {
+                           System.out.println("No Teacher found with this Id.");
+                           break;
+                       }
+
+                   }catch (Exception ex){
+                       System.out.println(ex);
+                   }finally {
+                       try {
+                           if (pst != null) pst.close();
+                           if (rs != null) rs.close();
+                           if (con != null) {
+
+                               con.close();
+                               System.out.println("DB connection close.");
+                           }
+                       } catch (SQLException e) {
+                           System.out.println(e);
+                       }
+                   }
+                   courseService.con = DbConnection.connect();
+                   courseService.createCourse(new Course(courseId,courseName,tId));
 
                }
                 //case 8 : to view all courses
                case 8 -> {
+                 courseService.con = DbConnection.connect();
                  courseService.viewCourse();
                }
                // case 9 : enroll student to course
@@ -266,15 +298,46 @@ public class InstituteAppV2 {
                        throw new RuntimeException("!!!! Enter valid course ID. !!!!");
                    }
 
-//                  Student student = studentService.getStudent(studId);
-//                   Course course = courseService.getCourse(courseId);
-//
-//                   if (student == null || course == null) {
-//                       System.out.println("Invalid Student ID or Course ID.");
-//                       break;
-//                   }
-//
-//                   courseService.enrollStudent(student,course);
+                   String query1 = "select stud_id from student where stud_id = ?";
+
+                   String query2 = "Select course_id from course where course_id = ?";
+                   PreparedStatement pst = null;
+                   ResultSet rs1 = null;
+                   ResultSet rs2 = null;
+
+                   con = DbConnection.connect();
+                   try{
+                       pst = con.prepareStatement(query1);
+                       pst.setInt(1,studId);
+                       rs1 = pst.executeQuery();
+
+                       pst = con.prepareStatement(query2);
+                       pst.setInt(1,courseId);
+                       rs2 = pst.executeQuery();
+
+                       if ((!rs1.next()) && (!rs2.next())) {
+                           System.out.println("Invalid Student ID or Course ID.");
+                           break;
+                       }
+
+                   }catch (Exception ex){
+                       System.out.println(ex);
+                   }finally {
+                       try {
+                           if (pst != null) pst.close();
+                           if (rs1 != null) rs1.close();
+                           if (rs1 != null) rs1.close();
+                           if (con != null) {
+
+                               con.close();
+                               System.out.println("DB connection close.");
+                           }
+                       } catch (SQLException e) {
+                           System.out.println(e);
+                       }
+                   }
+                   courseService.con = DbConnection.connect();
+                   courseService.enrollStudent(studId,courseId);
                }
                 //case 10 : courses enroll by student
                case 10 -> {
@@ -327,11 +390,11 @@ public class InstituteAppV2 {
                    }catch (InputMismatchException e){
                        throw new RuntimeException("!!!! Enter valid Student ID. !!!!");
                    }
-                   Course course = courseService.getCourse(courseId);
-                   if(course == null){
-                       System.out.println("Invalid course Id.");
-                       break;
-                   }
+//                   Course course = courseService.getCourse(courseId);
+//                   if(course == null){
+//                       System.out.println("Invalid course Id.");
+//                       break;
+//                   }
 
                    // take amount form user
                    System.out.println("Enter amount :");

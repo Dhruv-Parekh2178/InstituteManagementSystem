@@ -71,8 +71,8 @@ public class StudentService {
 
                     do {
                         System.out.println(
-                                "ID : " + rs.getInt(1) +
-                                        " | Name : " + rs.getString(2) +
+                                "Student_ID : " + rs.getInt(1) +
+                                        " | Student_Name : " + rs.getString(2) +
                                         " | Age : " + rs.getByte(3) +
                                         " | Result : " + rs.getString(5) +
                                         " | Total Paid ₹" + rs.getDouble(6)

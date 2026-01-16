@@ -26,6 +26,7 @@ public class Employee {
 
     /**
      * This method return the employee Id.
+     *
      * @return employee Id of particular employee object.
      */
 
@@ -47,14 +48,11 @@ public class Employee {
 
     /**
      * this method return the role of Employee
+     *
      * @return role of employee in string.
      */
-    public String getRole(){
+    public String getRole() {
         return role;
     }
 
-    public String toString(){
-        return "ID : " + empId +" | Name : " + empName + "  | Role : " + role + " |  Salary : " + salary ;
-
-    }
 }

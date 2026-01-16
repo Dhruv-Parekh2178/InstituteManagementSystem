@@ -12,15 +12,7 @@ import java.util.List;
  */
 
 public class Teacher extends Employee{
-
-
     public Teacher(int empId, String empName, byte age,double salary) {
         super(empId, empName, age,"TRAINER", salary);
-    }
-
-
-
-    public String toString(){
-        return "ID : " + empId + " | Name : " + empName + "| Role : " + role + " | Salary : " + salary ;
     }
 }

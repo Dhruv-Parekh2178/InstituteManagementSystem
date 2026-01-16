@@ -67,8 +67,8 @@ public class TeacherService {
 
             do {
                 System.out.println(
-                        "ID : " + rs.getInt(1) +
-                                " | Name : " + rs.getString(2) +
+                        "Teacher_ID : " + rs.getInt(1) +
+                                " | Teacher_Name : " + rs.getString(2) +
                                 " | Age : " + rs.getByte(3) +
                                 " | Role : " + rs.getString(4) +
                                 " | Salary ₹" + rs.getDouble(5)

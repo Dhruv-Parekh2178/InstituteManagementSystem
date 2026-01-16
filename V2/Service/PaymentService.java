@@ -24,8 +24,8 @@ public class PaymentService {
      * @return flag that student enroll or not.
      */
     public boolean checkIfStudentEnroll(int studId , int courseId){
-        Course verifyStudent = courseService.getCourse(courseId);
-        Set<Student> studEnrollToCourse = verifyStudent.getStudSet();
+//        Course verifyStudent = courseService.getCourse(courseId);
+//        Set<Student> studEnrollToCourse = verifyStudent.getStudSet();
 //        Student EnrolledStud = studentService.getStudent(studId);
 
 //        boolean flag = studEnrollToCourse.contains(EnrolledStud);

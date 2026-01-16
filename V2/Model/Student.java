@@ -79,9 +79,4 @@ public class Student {
         totalPaid+= amount;
     }
 
-    public String toString(){
-        return "ID : " + studId+ " | Name : " + studName+ " | Age : " + age + " | Result : "+ result + " | Total Paid ₹" + totalPaid;
-    }
-
-
 }
